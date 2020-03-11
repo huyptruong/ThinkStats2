@@ -26,7 +26,7 @@ def ReadFemResp(dct_file='2002FemResp.dct',
     """
     dct = thinkstats2.ReadStataDct(dct_file)
     df = dct.ReadFixedWidth(dat_file, compression='gzip', nrows=nrows)
-    CleanFemResp(df)
+    CleanFemResp(df) # does nothing
     return df
 
 
@@ -55,6 +55,11 @@ def ReadFemPreg(dct_file='2002FemPreg.dct',
 
 def CleanFemPreg(df):
     """Recodes variables from the pregnancy frame.
+    Full source: https://www.icpsr.umich.edu/nsfg6/
+    Abridged source: See 2002 FemPreg.dct
+    Difference between full source (1) and abridged source (2):
+    - (1) contains full definitions of variables and their possible values. The replace step below was based on (1)
+    - (2) just contains short definitions of variables.
 
     df: DataFrame
     """
@@ -69,10 +74,10 @@ def CleanFemPreg(df):
     na_vals = [97, 98, 99]
     df.birthwgt_lb.replace(na_vals, np.nan, inplace=True)
     df.birthwgt_oz.replace(na_vals, np.nan, inplace=True)
-    df.hpagelb.replace(na_vals, np.nan, inplace=True)
+    df.hpagelb.replace(na_vals, np.nan, inplace=True) # BD-6 FATHER'S AGE AT TIME OF CHILD(REN) S BIRTH
 
     df.babysex.replace([7, 9], np.nan, inplace=True)
-    df.nbrnaliv.replace([9], np.nan, inplace=True)
+    df.nbrnaliv.replace([9], np.nan, inplace=True)    # BC-2 NUMBER OF BABIES BORN ALIVE FROM THIS PREGNANCY
 
     # birthweight is stored in two columns, lbs and oz.
     # convert to a single column in lb
@@ -82,7 +87,7 @@ def CleanFemPreg(df):
 
     # due to a bug in ReadStataDct, the last variable gets clipped;
     # so for now set it to NaN
-    df.cmintvw = np.nan
+    df.cmintvw = np.nan                              # Century month of interview date
 
 
 def ValidatePregnum(resp, preg):
@@ -150,7 +155,7 @@ def main():
     assert preg.totalwgt_lb.value_counts()[7.5] == 302
 
     weights = preg.finalwgt.value_counts()
-    key = max(weights.keys())
+    key = max(weights.keys()) # returns all the indices of a Series
     assert preg.finalwgt.value_counts()[key] == 6
 
     # validate that the pregnum column in `resp` matches the number
