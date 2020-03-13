@@ -414,7 +414,7 @@ class Hist(_DictWrapper):
         Returns:
             int frequency
         """
-        return self.d.get(x, 0)
+        return self.d.get(x, 0) 
 
     def Freqs(self, xs):
         """Gets frequencies for a sequence of values."""

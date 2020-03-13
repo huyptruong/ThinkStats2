@@ -751,6 +751,7 @@ def bigger_text():
 
 def Show(**options):
     """Shows the plot.
+    Looks to me that it's just a special case (or clone) of Config function
 
     For options, see Config.
 
