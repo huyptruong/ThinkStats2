@@ -96,6 +96,19 @@ def ValidatePregnum(resp, preg):
     resp: respondent DataFrame
     preg: pregnancy DataFrame
     """
+    # My understanding: resp is a derivative of preg, since  we know from the main function
+    # that the number of rows in resp < number of rows in preg and the for loop code in
+    # this function (which I know for sure is used to verify something) only loops through resp.
+    
+    # Thus, what this code (supposedly) does is that it verifies the number of pregnancies for
+    # a caseid (manifested through the pregnum variable below) is equal to the count of pregnancies
+    # for that caseid in the `preg` dataframe
+    
+    # To prove this, it suffices to check the following statement: the caseid column in
+    # resp contains unique records, assuming that no duplicate rows exist in resp
+    
+    # Yep. Take a look at my work in chap01ex notebook.
+    
     # make the map from caseid to list of pregnancy indices
     preg_map = MakePregMap(preg)
     
@@ -120,7 +133,7 @@ def MakePregMap(df):
 
     returns: dict that maps from caseid to list of indices into `preg`
     """
-    d = defaultdict(list)
+    d = defaultdict(list) # we need defaultdict to automatically insert new caseid into d, if caseid hasn't existed yet.
     for index, caseid in df.caseid.iteritems():
         d[caseid].append(index)
     return d
